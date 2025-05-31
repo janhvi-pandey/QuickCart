@@ -100,13 +100,14 @@ export default function CheckoutPage() {
       }
 
       console.log("Success response:", data);
+      console.log(data.orderId)
       toast.success("ORDER successfully placed!", {
         duration: 2000,
       });
 
       setTimeout(() => {
-        router.push("/thankyou");
-      }, 2000);
+        router.push(`/thankyou?orderId=${data.orderId}`);
+      }, 2500);
     } catch (error) {
       console.error("Checkout error:", error);
       toast.error("Server error. Please try again.");

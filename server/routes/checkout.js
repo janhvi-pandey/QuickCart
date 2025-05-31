@@ -47,7 +47,7 @@ router.post("/", checkoutValidation, async (req, res) => {
 
     res.status(201).json({
       message: "Order created successfully",
-      orderId: order._id,
+      orderId: order.orderId,
       orderNumber: order.orderNumber,
     });
   } catch (error) {
