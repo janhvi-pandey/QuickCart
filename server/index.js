@@ -5,7 +5,7 @@ const bodyParser = require("body-parser");
 const connectDB = require("./config/db");
 const productRoutes=require("./routes/productRoutes");
 const checkoutRoutes= require("./routes/checkout");
-
+const orderRoutes=require("./routes/Order");
 
 dotenv.config();
 
@@ -22,6 +22,8 @@ app.use(bodyParser.json());
 // Routes
 app.use("/api/products", productRoutes);
 app.use("/api/checkout",checkoutRoutes);
+app.use("/api/orders",orderRoutes);
+
 
 
 app.get("/", (req, res) => {
