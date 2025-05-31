@@ -26,6 +26,7 @@ router.post("/", checkoutValidation, async (req, res) => {
       product: {
         id: product._id,
         title: product.title,
+        description: product.description,
         variant: form.variant || "",
         quantity: quantity,
         price: product.price,

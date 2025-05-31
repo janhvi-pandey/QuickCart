@@ -1,5 +1,5 @@
 "use client";
-
+import Link from "next/link";
 import { useState, useEffect } from "react";
 import { useSearchParams } from "next/navigation";
 
@@ -35,7 +35,7 @@ export default function ThankYouPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex justify-center items-center bg-gradient-to-br from-blue-100 via-blue-300 to-blue-500 text-blue-900">
+      <div className="min-h-screen flex justify-center items-center bg-gradient-to-br from-blue-100 via-blue-300 to-blue-500 text-blue-900 px-4">
         Loading order details...
       </div>
     );
@@ -43,83 +43,118 @@ export default function ThankYouPage() {
 
   if (error) {
     return (
-      <div className="min-h-screen flex justify-center items-center bg-gradient-to-br from-blue-100 via-blue-300 to-blue-500 text-red-600 font-semibold">
+      <div className="min-h-screen flex justify-center items-center bg-gradient-to-br from-blue-100 via-blue-300 to-blue-500 text-red-600 font-semibold px-4">
         {error}
       </div>
     );
   }
 
   return (
-    <main className="min-h-screen bg-gradient-to-br from-blue-100 via-blue-300 to-blue-500 text-blue-900 p-8 flex justify-center items-start pt-20">
-      <div className="bg-white rounded-xl shadow-xl max-w-4xl w-full p-10 space-y-8">
-
-        {/* Final Confirmation Message */}
-        <section className="text-center">
-          <h1 className="text-5xl font-extrabold mb-3">Thank You for Your Order!</h1>
-          <p className="text-xl font-semibold text-blue-800">
-            Your order has been successfully placed.
+    <main className="min-h-screen w-full bg-gradient-to-br from-blue-100 via-blue-300 to-blue-500 p-6 flex justify-center items-start pt-12">
+      <div className="max-w-4xl w-full px-4">
+        <section className="mb-8 text-center">
+          <h1 className="text-4xl font-extrabold mb-2 text-blue-900 drop-shadow-md">
+            Thank You for Your Order!
+          </h1>
+          <p className="text-lg font-medium text-blue-800">
+            We appreciate your trust in{" "}
+            <span className="text-black font-bold">
+              <Link href="/products">QuickCart</Link>
+            </span>
+            . Feel free to explore more amazing products!
           </p>
         </section>
 
-        {/* Unique Order Number */}
-        <section className="border rounded-lg border-blue-300 p-6">
-          <h2 className="text-3xl font-bold mb-4">Order Number</h2>
-          <p className="text-lg font-mono bg-blue-50 p-3 rounded text-center select-all">
-            {order.orderId}
-          </p>
-        </section>
+        <div className="bg-white rounded-xl shadow-xl p-8 space-y-6">
+          <section className="border border-blue-300 rounded-lg p-5">
+            <h2 className="text-2xl font-bold mb-2 text-blue-900">
+              Order Number
+            </h2>
+            <p className="text-base font-mono bg-blue-50 p-2 rounded text-center select-all text-black">
+              {order.orderId}
+            </p>
+          </section>
 
-        {/* Full Order Summary */}
-        <section className="border rounded-lg border-blue-300 p-6 flex flex-col md:flex-row md:space-x-10">
-          <div className="flex-shrink-0 mb-6 md:mb-0">
-            {order.product.image ? (
-              <img
-                src={order.product.image}
-                alt={order.product.title}
-                className="rounded-lg shadow-lg max-w-[200px] object-contain"
-              />
-            ) : (
-              <div className="w-48 h-48 bg-gray-200 rounded-lg flex items-center justify-center text-gray-400">
-                No Image
+          <section className="border border-blue-300 rounded-lg p-5">
+            <h2 className="text-2xl font-bold mb-4 text-blue-900">
+              Order Summary
+            </h2>
+            <div className="flex flex-col md:flex-row md:space-x-8 items-center justify-center">
+              <div className="w-48 h-48 flex items-center justify-center mb-4 md:mb-0">
+                {order.product.image ? (
+                  <img
+                    src={order.product.image}
+                    alt={order.product.title}
+                    className="rounded-lg shadow-md object-contain max-h-full"
+                  />
+                ) : (
+                  <div className="w-full h-full bg-gray-200 rounded-lg flex items-center justify-center text-gray-400">
+                    No Image
+                  </div>
+                )}
               </div>
-            )}
-          </div>
-          <div>
-            <h2 className="text-3xl font-bold mb-4">Order Summary</h2>
-            <p className="text-xl font-semibold mb-2">{order.product.title}</p>
-            <p className="mb-1">
-              <strong>Quantity:</strong> {order.product.quantity}
-            </p>
-            <p className="mb-1">
-              <strong>Price:</strong> ${order.product.price.toFixed(2)}
-            </p>
-            <p className="mb-1">
-              <strong>Total:</strong> ${order.product.total.toFixed(2)}
-            </p>
-            <p className="mt-4 text-sm text-gray-600">
-              <strong>Status:</strong>{" "}
-              <span className="text-green-600">{order.transactionStatus || "Approved"}</span>
-            </p>
-            <p className="text-sm text-gray-600">
-              <strong>Placed on:</strong> {new Date(order.createdAt).toLocaleString()}
-            </p>
-          </div>
-        </section>
+              <div className="text-black w-full">
+                <p className="text-xl font-semibold text-blue-800 mb-1">
+                  {order.product.title}
+                </p>
+                {order.product.description && (
+                  <p className="text-sm text-gray-600 mb-3">
+                    {order.product.description}
+                  </p>
+                )}
+                <div className="space-y-1 text-base">
+                  <p>
+                    <strong className="text-gray-600">Quantity:</strong>{" "}
+                    {order.product.quantity}
+                  </p>
+                  <p>
+                    <strong className="text-gray-600">Price:</strong> $
+                    {order.product.price.toFixed(2)}
+                  </p>
+                  <p>
+                    <strong className="text-gray-600">Total:</strong> $
+                    {order.product.total.toFixed(2)}
+                  </p>
+                  <p>
+                    <strong className="text-gray-600">Status:</strong>{" "}
+                    <span className="text-green-700 font-semibold">
+                      {order.transactionStatus || "Approved"}
+                    </span>
+                  </p>
+                  <p>
+                    <strong className="text-gray-600">Placed on:</strong>{" "}
+                    {new Date(order.createdAt).toLocaleString()}
+                  </p>
+                </div>
+              </div>
+            </div>
+          </section>
 
-        {/* Customer Information */}
-        <section className="border rounded-lg border-blue-300 p-6">
-          <h2 className="text-3xl font-bold mb-4">Customer Information</h2>
-          <div className="space-y-2 text-lg">
-            <p><strong>Full Name:</strong> {order.customer.fullName}</p>
-            <p><strong>Email:</strong> {order.customer.email}</p>
-            <p><strong>Phone:</strong> {order.customer.phone}</p>
-            <p>
-              <strong>Address:</strong>{" "}
-              {order.customer.address}, {order.customer.city}, {order.customer.state}
-            </p>
-          </div>
-        </section>
-
+          <section className="border border-blue-300 rounded-lg p-5">
+            <h2 className="text-2xl font-bold mb-3 text-blue-900">
+              Customer Information
+            </h2>
+            <div className="space-y-1 ">
+              <p>
+                <strong className="text-gray-600">Full Name:</strong>{" "}
+                {order.customer.fullName}
+              </p>
+              <p>
+                <strong className="text-gray-600">Email:</strong>{" "}
+                {order.customer.email}
+              </p>
+              <p>
+                <strong className="text-gray-600">Phone:</strong>{" "}
+                {order.customer.phone}
+              </p>
+              <p>
+                <strong className="text-gray-600">Address:</strong>{" "}
+                {order.customer.address}, {order.customer.city},{" "}
+                {order.customer.state}
+              </p>
+            </div>
+          </section>
+        </div>
       </div>
     </main>
   );
