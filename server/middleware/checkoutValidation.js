@@ -12,11 +12,16 @@ const checkoutValidation = [
   body("form.zipCode")
     .matches(/^\d{5}$/)
     .withMessage("Zip must be 5 digits"),
+  //   body("form.cardNumber")
+  //     .isCreditCard()
+  //     .withMessage("Invalid card")
+  //     .isLength({ min: 16, max: 16 })
+  //     .withMessage("Card must be 16 digits"),
+
   body("form.cardNumber")
-    .isCreditCard()
-    .withMessage("Invalid card")
-    .isLength({ min: 16, max: 16 })
+    .matches(/^\d{16}$/)
     .withMessage("Card must be 16 digits"),
+
   body("form.expiryDate")
     .isISO8601()
     .withMessage("Expiry format YYYY-MM-DD")

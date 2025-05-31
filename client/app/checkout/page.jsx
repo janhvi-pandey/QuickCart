@@ -14,21 +14,23 @@ import {
 } from "@/components/ui/breadcrumb";
 
 export default function CheckoutPage() {
+  const SERVER_URL = "http://localhost:5000";
+
   const searchParams = useSearchParams();
   const router = useRouter();
   const productId = searchParams.get("productId");
 
   const [product, setProduct] = useState(null);
   const [form, setForm] = useState({
-    name: "",
+    fullName: "",
     email: "",
     phone: "",
     address: "",
     city: "",
     state: "",
-    zip: "",
-    card: "",
-    expiry: "",
+    zipCode: "",
+    cardNumber: "",
+    expiryDate: "",
     cvv: "",
   });
 
@@ -44,7 +46,7 @@ export default function CheckoutPage() {
 
   useEffect(() => {
     if (productId) {
-      fetch(`https://dummyjson.com/products/${productId}`)
+      fetch(`${SERVER_URL}/api/products/${productId}`)
         .then((res) => res.json())
         .then(setProduct)
         .catch(console.error);
@@ -55,61 +57,60 @@ export default function CheckoutPage() {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
-  const validateForm = () => {
-    const emailRegex = /^\S+@\S+\.\S+$/;
-    const phoneRegex = /^\d{10}$/;
-    const cardRegex = /^\d{16}$/;
-    const cvvRegex = /^\d{3}$/;
-    const expiryDate = new Date(form.expiry);
-    const today = new Date();
-
-    return (
-      form.name &&
-      emailRegex.test(form.email) &&
-      phoneRegex.test(form.phone) &&
-      form.address &&
-      form.city &&
-      form.state &&
-      form.zip &&
-      cardRegex.test(form.card) &&
-      expiryDate > today &&
-      cvvRegex.test(form.cvv)
-    );
-  };
-
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    console.log("handleSubmit fired");
 
-    if (!validateForm()) {
-      toast.error("Please fill all fields correctly.");
+    if (!product) {
+      console.log("Product not loaded");
+      toast.error("Product not loaded yet.");
       return;
     }
 
-    const order = {
-      orderId: Math.floor(Math.random() * 1000000),
-      product,
-      quantity,
-      size,
-      total: (product.price + sizePriceIncrement[size]) * quantity,
+    const orderData = {
       form,
+      productId: product._id || product.id || productId,
+      quantity,
     };
 
-    console.log("Order submitted:", order);
+    console.log("Order data prepared:", orderData);
 
-    const outcome = ["approved", "declined", "error"][
-      Math.floor(Math.random() * 3)
-    ];
+    try {
+      const response = await fetch(`${SERVER_URL}/api/checkout`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(orderData),
+      });
 
-    setTimeout(() => {
-      if (outcome === "approved") {
-        toast.success("Transaction Approved! Redirecting...");
-        router.push("/thank-you");
-      } else if (outcome === "declined") {
-        toast.error("Transaction Declined.");
-      } else {
-        toast.error("Payment Gateway Error.");
+      console.log("Response status:", response.status);
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        // console.log("Error response:", data);
+
+        if (Array.isArray(data.errors)) {
+          data.errors.forEach((err) => toast.error(err.msg));
+        } else {
+          toast.error(data.error || "Failed to place order.");
+        }
+        return;
       }
-    }, 1000);
+
+      console.log("Success response:", data);
+      toast.success("ORDER successfully placed!", {
+        duration: 2000,
+      });
+
+      setTimeout(() => {
+        router.push("/thankyou");
+      }, 2000);
+    } catch (error) {
+      console.error("Checkout error:", error);
+      toast.error("Server error. Please try again.");
+    }
   };
 
   if (!product)
@@ -172,7 +173,7 @@ export default function CheckoutPage() {
                   <form onSubmit={handleSubmit} className="space-y-4">
                     <input
                       type="text"
-                      name="name"
+                      name="fullName"
                       placeholder="Full Name"
                       onChange={handleChange}
                       required
@@ -220,7 +221,7 @@ export default function CheckoutPage() {
                     />
                     <input
                       type="text"
-                      name="zip"
+                      name="zipCode"
                       placeholder="Zip Code"
                       onChange={handleChange}
                       required
@@ -228,15 +229,15 @@ export default function CheckoutPage() {
                     />
                     <input
                       type="text"
-                      name="card"
+                      name="cardNumber"
                       placeholder="Card Number (16 digits)"
                       onChange={handleChange}
                       required
                       className="w-full p-2 border rounded"
                     />
                     <input
-                      type="month"
-                      name="expiry"
+                      type="date"
+                      name="expiryDate"
                       onChange={handleChange}
                       required
                       className="w-full p-2 border rounded"
