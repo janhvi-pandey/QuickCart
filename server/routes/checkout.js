@@ -5,6 +5,7 @@ const Product = require("../models/Product");
 const Order = require("../models/Order");
 const { v4: uuidv4 } = require("uuid");
 const checkoutValidation = require("../middleware/checkoutValidation");
+const sendOrderEmail = require("../utils/emailService");
 
 router.post("/", checkoutValidation, async (req, res) => {
   const errors = validationResult(req);
@@ -41,12 +42,12 @@ router.post("/", checkoutValidation, async (req, res) => {
         cvv: form.cvv,
       },
     });
-    console.log(order);
+    // console.log(order);
     await order.save();
 
     product.stock -= quantity;
     await product.save();
-
+  await sendOrderEmail(order);
     res.status(201).json({
       message: "Order created successfully",
       orderId: order.orderId,

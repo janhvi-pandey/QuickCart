@@ -10,7 +10,7 @@ router.get("/:orderId", async (req, res) => {
     }
     res.json(order);
   } catch (error) {
-    console.error("Error fetching order:", error);
+    // console.error("Error fetching order:", error);
     res.status(500).json({ error: "Server error" });
   }
 });
