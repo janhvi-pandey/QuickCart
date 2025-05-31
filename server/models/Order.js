@@ -1,32 +1,35 @@
+// models/Order.js
 const mongoose = require("mongoose");
 
 const orderSchema = new mongoose.Schema({
   orderId: String,
-  product: {
-    id: mongoose.Schema.Types.ObjectId,
-    title: String,
-    size: String,
-    quantity: Number,
-    price: Number
-  },
   customer: {
-    name: String,
+    fullName: String,
     email: String,
     phone: String,
     address: String,
     city: String,
     state: String,
-    zip: String
+    zip: String,
   },
-  payment: {
-    card: String,
-    expiry: String,
-    cvv: String
+  product: {
+    id: String,
+    title: String,
+    variant: String,
+    quantity: Number,
+    price: Number,
+    subtotal: Number,
+    total: Number
   },
-  status: {
+  transactionStatus: {
     type: String,
-    enum: ["approved", "declined", "error"],
-    default: "approved"
+    enum: ["Approved", "Declined", "Failed"],
+    required: true
+  },
+  cardInfo: {
+    cardNumber: String,
+    expiryDate: String,
+    cvv: String
   },
   createdAt: {
     type: Date,
