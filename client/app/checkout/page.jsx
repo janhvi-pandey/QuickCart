@@ -89,7 +89,7 @@ export default function CheckoutPage() {
       const data = await response.json();
 
       if (!response.ok) {
-        // console.log("Error response:", data);
+        console.log("Error response:", data);
 
         if (Array.isArray(data.errors)) {
           data.errors.forEach((err) => toast.error(err.msg));

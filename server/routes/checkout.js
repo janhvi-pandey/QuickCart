@@ -29,6 +29,7 @@ router.post("/", checkoutValidation, async (req, res) => {
         variant: form.variant || "",
         quantity: quantity,
         price: product.price,
+        image: product.images?.[0] || "",
         subtotal: product.price * quantity,
         total: product.price * quantity,
       },
@@ -39,7 +40,7 @@ router.post("/", checkoutValidation, async (req, res) => {
         cvv: form.cvv,
       },
     });
-
+    console.log(order);
     await order.save();
 
     product.stock -= quantity;
