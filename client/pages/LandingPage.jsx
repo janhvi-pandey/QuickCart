@@ -44,9 +44,7 @@ const LandingPage = () => {
 
   return (
     <div className="relative min-h-screen bg-gradient-to-br from-[#d0e7ff] via-[#8eb7fa] to-[#7a92ba]  flex items-center justify-center px-6 sm:px-12 overflow-hidden text-white">
-     
       <div className="absolute inset-0 z-0">
-   
         <FloatingIcon1
           Icon={FaTshirt}
           style={{
@@ -74,7 +72,6 @@ const LandingPage = () => {
             animation: "float 6s ease-in-out infinite",
           }}
         />
-      
         <FloatingIcon2
           Icon={FaRobot}
           style={{
@@ -86,7 +83,6 @@ const LandingPage = () => {
             animationDelay: "0.5s",
           }}
         />
-        
         <FloatingIcon2
           Icon={FaLaptop}
           style={{
@@ -97,7 +93,6 @@ const LandingPage = () => {
             animationDelay: "1s",
           }}
         />
-       
         <FloatingIcon2
           Icon={FaShoppingBag}
           style={{
@@ -109,7 +104,6 @@ const LandingPage = () => {
             transform: "translateY(-50%)",
           }}
         />
-     
         <FloatingIcon1
           Icon={FaShopify}
           style={{
@@ -120,7 +114,6 @@ const LandingPage = () => {
             animationDelay: "2.2s",
           }}
         />
-     
         <FloatingIcon2
           Icon={GiSonicShoes}
           style={{
@@ -132,7 +125,6 @@ const LandingPage = () => {
             animationDelay: "2.5s",
           }}
         />
-       
         <FloatingIcon1
           Icon={FaMobileAlt}
           style={{
@@ -155,7 +147,6 @@ const LandingPage = () => {
         />
       </div>
 
-    
       <div className="relative z-10 max-w-4xl text-center space-y-8 py-12 px-4">
         <h1
           className="lg:text-6xl text-3xl md:text-5xl font-extrabold leading-tight text-transparent bg-clip-text"

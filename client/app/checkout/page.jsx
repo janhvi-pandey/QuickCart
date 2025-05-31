@@ -44,12 +44,21 @@ export default function CheckoutPage() {
     XL: 15,
   };
 
+  // useEffect(() => {
+  //   if (productId) {
+  //     fetch(`${SERVER_URL}/api/products/${productId}`)
+  //       .then((res) => res.json())
+  //       .then(setProduct)
+  //       .catch(console.error);
+  //   }
+  // }, [productId]);
+
   useEffect(() => {
     if (productId) {
       fetch(`${SERVER_URL}/api/products/${productId}`)
         .then((res) => res.json())
         .then(setProduct)
-        .catch(console.error);
+        .catch(() => {});
     }
   }, [productId]);
 
@@ -59,10 +68,10 @@ export default function CheckoutPage() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("handleSubmit fired");
+    // console.log("handleSubmit fired");
 
     if (!product) {
-      console.log("Product not loaded");
+      // console.log("Product not loaded");
       toast.error("Product not loaded yet.");
       return;
     }
@@ -73,7 +82,7 @@ export default function CheckoutPage() {
       quantity,
     };
 
-    console.log("Order data prepared:", orderData);
+    // console.log("Order data prepared:", orderData);
 
     try {
       const response = await fetch(`${SERVER_URL}/api/checkout`, {
@@ -84,12 +93,12 @@ export default function CheckoutPage() {
         body: JSON.stringify(orderData),
       });
 
-      console.log("Response status:", response.status);
+      // console.log("Response status:", response.status);
 
       const data = await response.json();
 
       if (!response.ok) {
-        console.log("Error response:", data);
+        // console.log("Error response:", data);
 
         if (Array.isArray(data.errors)) {
           data.errors.forEach((err) => toast.error(err.msg));
@@ -99,17 +108,15 @@ export default function CheckoutPage() {
         return;
       }
 
-      console.log("Success response:", data);
-      console.log(data.orderId)
-      toast.success("ORDER successfully placed!", {
-        duration: 2000,
-      });
+      // console.log("Success response:", data);
+      // console.log(data.orderId)
+      toast.success("Order Sucessfully Placed!");
 
       setTimeout(() => {
         router.push(`/thankyou?orderId=${data.orderId}`);
       }, 2500);
     } catch (error) {
-      console.error("Checkout error:", error);
+      // console.error("Checkout error:", error);
       toast.error("Server error. Please try again.");
     }
   };

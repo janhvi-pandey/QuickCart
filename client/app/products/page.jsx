@@ -12,17 +12,16 @@ const FloatingIcon = ({ Icon, style }) => (
 );
 
 export default function ProductsPage() {
-
-  const SERVER_URL = "http://localhost:5000"; 
+  const SERVER_URL = "http://localhost:5000";
   const [products, setProducts] = useState([]);
   const router = useRouter();
 
-useEffect(() => {
-  fetch(`${SERVER_URL}/api/products`)
-    .then((res) => res.json())
-    .then((data) => setProducts(data))
-    .catch(console.error);
-}, []);
+  useEffect(() => {
+    fetch(`${SERVER_URL}/api/products`)
+      .then((res) => res.json())
+      .then((data) => setProducts(data))
+      .catch(() => {});
+  }, []);
 
   const colors = ["Red", "Blue", "Green", "Black", "White"];
 
