@@ -14,7 +14,7 @@ import {
 
 export default function CheckoutInner() {
   //   const SERVER_URL = "http://localhost:5000";
-  const SERVER_URL = "https://quick-cart-backend-seven.vercel.app/";
+  const SERVER_URL = "https://quick-cart-backend-seven.vercel.app";
 
   const searchParams = useSearchParams();
   const router = useRouter();
