@@ -10,8 +10,8 @@ const checkoutValidation = [
   body("form.city").notEmpty().withMessage("City is required"),
   body("form.state").notEmpty().withMessage("State is required"),
   body("form.zipCode")
-    .matches(/^\d{5}$/)
-    .withMessage("Zip must be 5 digits"),
+    .matches(/^\d{6}$/)
+    .withMessage("Zip must be 6 digits"),
   //   body("form.cardNumber")
   //     .isCreditCard()
   //     .withMessage("Invalid card")

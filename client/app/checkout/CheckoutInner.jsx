@@ -14,8 +14,8 @@ import {
 
 export default function CheckoutInner() {
   //   const SERVER_URL = "http://localhost:5000";
-  const SERVER_URL = "https://server-quick-cart.vercel.app";
 
+  const SERVER_URL = "https://server-quick-cart.vercel.app";
   const searchParams = useSearchParams();
   const router = useRouter();
   const productId = searchParams.get("productId");
@@ -36,9 +36,9 @@ export default function CheckoutInner() {
     cvv: "",
   });
 
+  const [errors, setErrors] = useState({});
   const [quantity, setQuantity] = useState(initialQuantity);
   const [size, setSize] = useState(initialSize);
-
   const sizePriceIncrement = { S: 0, M: 5, L: 10, XL: 15 };
 
   useEffect(() => {
@@ -59,8 +59,44 @@ export default function CheckoutInner() {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
+  const validateForm = () => {
+    const newErrors = {};
+
+    if (!form.fullName.trim()) newErrors.fullName = "Full name is required";
+    if (!/\S+@\S+\.\S+/.test(form.email))
+      newErrors.email = "Invalid email format";
+    if (!/^\d{10}$/.test(form.phone))
+      newErrors.phone = "Phone must be 10 digits";
+    if (!form.address.trim()) newErrors.address = "Address is required";
+    if (!form.city.trim()) newErrors.city = "City is required";
+    if (!form.state.trim()) newErrors.state = "State is required";
+    if (!/^\d{6}$/.test(form.zipCode))
+      newErrors.zipCode = "Zip must be 6 digits";
+    if (!/^\d{16}$/.test(form.cardNumber))
+      newErrors.cardNumber = "Card must be 16 digits";
+    if (!form.expiryDate) {
+      newErrors.expiryDate = "Expiry date is required";
+    } else {
+      const expiry = new Date(form.expiryDate);
+      const today = new Date();
+      if (expiry < today) newErrors.expiryDate = "Expiry must be future date";
+    }
+    if (!/^\d{3}$/.test(form.cvv)) newErrors.cvv = "CVV must be 3 digits";
+    if (!productId) newErrors.productId = "Product ID is missing";
+    if (quantity < 1) newErrors.quantity = "Quantity must be ≥ 1";
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    const isValid = validateForm();
+    if (!isValid) {
+      toast.error("Please fix the errors before submitting.");
+      return;
+    }
 
     if (!product) {
       toast.error("Product not loaded yet.");
@@ -82,7 +118,7 @@ export default function CheckoutInner() {
       });
 
       const data = await response.json();
-      // console.log(data);
+
       if (!response.ok) {
         if (Array.isArray(data.errors)) {
           data.errors.forEach((err) => toast.error(err.msg));
@@ -96,7 +132,7 @@ export default function CheckoutInner() {
       setTimeout(() => {
         router.push(`/thankyou?orderId=${data.orderId}`);
       }, 2000);
-    } catch (error) {
+    } catch {
       toast.error("Server error. Please try again.");
     }
   };
@@ -153,7 +189,6 @@ export default function CheckoutInner() {
 
         <div className="lg:bg-white/60 md:p-12 rounded-xl md:shadow-lg">
           <div className="flex flex-col md:flex-row gap-6">
-            {/* Form Section */}
             <Card className="flex-1 bg-white border-0 md:border">
               <CardHeader>
                 <CardTitle className="font-semibold text-lg text-blue-900">
@@ -180,7 +215,7 @@ export default function CheckoutInner() {
                     {
                       name: "zipCode",
                       type: "text",
-                      placeholder: "Zip Code (5 digits)",
+                      placeholder: "Zip Code (6 digits)",
                     },
                     {
                       name: "cardNumber",
@@ -190,7 +225,7 @@ export default function CheckoutInner() {
                     {
                       name: "expiryDate",
                       type: "date",
-                      placeholder: "Expiry date should be a future date",
+                      placeholder: "Expiry Date",
                     },
                     {
                       name: "cvv",
@@ -198,20 +233,31 @@ export default function CheckoutInner() {
                       placeholder: "CVV (3 digits)",
                     },
                   ].map((field) => (
-                    <input
-                      key={field.name}
-                      type={field.type}
-                      name={field.name}
-                      placeholder={field.placeholder}
-                      onChange={handleChange}
-                      required
-                      className="w-full p-2 border rounded"
-                    />
+                    <div key={field.name}>
+                      <input
+                        type={field.type}
+                        name={field.name}
+                        placeholder={field.placeholder}
+                        value={form[field.name]}
+                        onChange={handleChange}
+                        required
+                        className={`w-full p-2 border rounded ${
+                          errors[field.name]
+                            ? "border-red-500"
+                            : "border-gray-300"
+                        }`}
+                      />
+                      {errors[field.name] && (
+                        <p className="text-red-600 text-sm mt-1">
+                          {errors[field.name]}
+                        </p>
+                      )}
+                    </div>
                   ))}
 
                   <button
                     type="submit"
-                    className="w-full mt-4 bg-blue-700 hover:bg-blue-800 text-white py-2 px-4 rounded font-semibold cursor-pointer transition"
+                    className="w-full mt-4 bg-blue-700 hover:bg-blue-800 text-white py-2 px-4 rounded font-semibold transition"
                   >
                     Complete Purchase
                   </button>
@@ -219,8 +265,7 @@ export default function CheckoutInner() {
               </CardContent>
             </Card>
 
-            {/* Summary Section */}
-            <Card className="md:w-1/3  bg-blue-100 border-black">
+            <Card className="md:w-1/3 bg-blue-100 border-black">
               <CardHeader>
                 <CardTitle className="font-semibold text-lg text-blue-900">
                   Order Summary
@@ -263,6 +308,9 @@ export default function CheckoutInner() {
                   onChange={(e) => setQuantity(parseInt(e.target.value))}
                   className="w-full p-2 border border-gray-400 rounded mb-3"
                 />
+                {errors.quantity && (
+                  <p className="text-red-600 text-sm mt-1">{errors.quantity}</p>
+                )}
 
                 <div className="flex justify-between text-sm font-medium mt-4">
                   <span>Subtotal:</span>
