@@ -2,6 +2,9 @@
 import Link from "next/link";
 import { useState, useEffect } from "react";
 import { useSearchParams } from "next/navigation";
+import { MdCardGiftcard } from "react-icons/md";
+import { FaUser } from "react-icons/fa6";
+import { TbEdit } from "react-icons/tb";
 
 export default function ThankYouPage() {
   const searchParams = useSearchParams();
@@ -35,7 +38,7 @@ export default function ThankYouPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex justify-center items-center bg-gradient-to-br from-blue-100 via-blue-300 to-blue-500 text-blue-900 px-4">
+      <div className="min-h-screen flex justify-center items-center bg-blue-500 text-white px-4">
         Loading order details...
       </div>
     );
@@ -43,43 +46,49 @@ export default function ThankYouPage() {
 
   if (error) {
     return (
-      <div className="min-h-screen flex justify-center items-center bg-gradient-to-br from-blue-100 via-blue-300 to-blue-500 text-red-600 font-semibold px-4">
+      <div className="min-h-screen flex justify-center items-center bg-blue-500 text-red-100 font-semibold px-4">
         {error}
       </div>
     );
   }
 
   return (
-    <main className="min-h-screen w-full bg-gradient-to-br from-blue-100 via-blue-300 to-blue-500 p-6 flex justify-center items-start pt-12">
-      <div className="max-w-4xl w-full px-4">
-        <section className="mb-8 text-center">
-          <h1 className="text-4xl font-extrabold mb-2 text-blue-900 drop-shadow-md">
+    <main className="min-h-screen px-10 w-full bg-gradient-to-br from-blue-200 via-blue-400 to-blue-700 text-slate-900 relative overflow-hidden font-sans flex justify-center items-start py-12 ">
+      <div className="max-w-4xl w-full">
+        {/* Header */}
+        <section className="mb-10 text-center">
+          <h1 className="text-4xl  text-blue-900 font-extrabold mb-3 drop-shadow">
             Thank You for Your Order!
           </h1>
-          <p className="text-lg font-medium text-blue-800">
+          <p className="text-lg  text-blue-900 font-medium">
             We appreciate your trust in{" "}
-            <span className="text-black font-bold">
-              <Link href="/products">QuickCart</Link>
-            </span>
-            . Feel free to explore more amazing products!
+            <Link href="/products" className="text-black font-semibold">
+              QuickCart
+            </Link>
+            . Come back soon for more amazing deals!
           </p>
         </section>
 
-        <div className="bg-white rounded-xl shadow-xl p-8 space-y-6">
-          <section className="border border-blue-300 rounded-lg p-5">
-            <h2 className="text-2xl font-bold mb-2 text-blue-900">
+        {/* Order Summary */}
+        <div className="bg-white rounded-2xl shadow-2xl lg:p-8 p-4 space-y-8 text-black">
+          {/* Order ID */}
+          <section className="border border-blue-300 rounded-xl p-5">
+            <h2 className="text-2xl font-bold text-blue-900 mb-2 flex items-center gap-2">
+              <TbEdit className="text-blue-600" />
               Order Number
             </h2>
-            <p className="text-base font-mono bg-blue-50 p-2 rounded text-center select-all text-black">
+            <p className="font-mono bg-blue-50 p-3 rounded text-center text-lg select-all">
               {order.orderId}
             </p>
           </section>
 
-          <section className="border border-blue-300 rounded-lg p-5">
-            <h2 className="text-2xl font-bold mb-4 text-blue-900">
+          {/* Product Info */}
+          <section className="border border-blue-300 rounded-xl p-5">
+            <h2 className="text-2xl font-bold text-blue-900 mb-4 flex items-center gap-2">
+              <MdCardGiftcard className="text-blue-600" />
               Order Summary
             </h2>
-            <div className="flex flex-col md:flex-row md:space-x-8 items-center justify-center">
+            <div className="flex flex-col md:flex-row md:space-x-6 items-center">
               <div className="w-48 h-48 flex items-center justify-center mb-4 md:mb-0">
                 {order.product.image ? (
                   <img
@@ -93,7 +102,8 @@ export default function ThankYouPage() {
                   </div>
                 )}
               </div>
-              <div className="text-black w-full">
+
+              <div className="w-full">
                 <p className="text-xl font-semibold text-blue-800 mb-1">
                   {order.product.title}
                 </p>
@@ -102,39 +112,50 @@ export default function ThankYouPage() {
                     {order.product.description}
                   </p>
                 )}
-                <div className="space-y-1 text-base">
-                  <p>
-                    <strong className="text-gray-600">Quantity:</strong>{" "}
-                    {order.product.quantity}
-                  </p>
-                  <p>
-                    <strong className="text-gray-600">Price:</strong> $
-                    {order.product.price.toFixed(2)}
-                  </p>
-                  <p>
-                    <strong className="text-gray-600">Total:</strong> $
-                    {order.product.total.toFixed(2)}
-                  </p>
-                  <p>
-                    <strong className="text-gray-600">Status:</strong>{" "}
-                    <span className="text-green-700 font-semibold">
-                      {order.transactionStatus || "Approved"}
-                    </span>
-                  </p>
-                  <p>
-                    <strong className="text-gray-600">Placed on:</strong>{" "}
-                    {new Date(order.createdAt).toLocaleString()}
-                  </p>
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:gap-y-2 text-base">
+                  <div>
+                    <p>
+                      <strong className="text-gray-600">Quantity:</strong>{" "}
+                      {order.product.quantity}
+                    </p>
+                    <p>
+                      <strong className="text-gray-600">Size:</strong>{" "}
+                      {order.product.size}
+                    </p>
+                    <p>
+                      <strong className="text-gray-600">Placed on:</strong>{" "}
+                      {new Date(order.createdAt).toLocaleString()}
+                    </p>
+                  </div>
+
+                  <div>
+                    <p>
+                      <strong className="text-gray-600">Price per unit:</strong>{" "}
+                      ${order.product.price.toFixed(2)}
+                    </p>
+                    <p>
+                      <strong className="text-gray-600">Total:</strong> $
+                      {order.product.total.toFixed(2)}
+                    </p>
+                    <p>
+                      <strong className="text-gray-600">Status:</strong>{" "}
+                      <span className="text-green-700 font-semibold">
+                        {order.transactionStatus || "Approved"}
+                      </span>
+                    </p>
+                  </div>
                 </div>
               </div>
             </div>
           </section>
 
-          <section className="border border-blue-300 rounded-lg p-5">
-            <h2 className="text-2xl font-bold mb-3 text-blue-900">
-              Customer Information
+          {/* Customer Info */}
+          <section className="border border-blue-300 rounded-xl p-5">
+            <h2 className="text-2xl font-bold mb-3 text-blue-900 flex items-center gap-2">
+              <FaUser className="text-blue-600 text-lg " />
+              Customer Details
             </h2>
-            <div className="space-y-1 ">
+            <div className="grid grid-cols-1 gap-y-2 text-base">
               <p>
                 <strong className="text-gray-600">Full Name:</strong>{" "}
                 {order.customer.fullName}

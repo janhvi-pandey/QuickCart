@@ -81,7 +81,7 @@ export default function CheckoutPage() {
       });
 
       const data = await response.json();
-
+      // console.log(data);
       if (!response.ok) {
         if (Array.isArray(data.errors)) {
           data.errors.forEach((err) => toast.error(err.msg));
@@ -94,7 +94,7 @@ export default function CheckoutPage() {
       toast.success("Order Successfully Placed!");
       setTimeout(() => {
         router.push(`/thankyou?orderId=${data.orderId}`);
-      }, 2500);
+      }, 2000);
     } catch (error) {
       toast.error("Server error. Please try again.");
     }
