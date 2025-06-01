@@ -24,7 +24,6 @@ export default function ProductsPage() {
   const router = useRouter();
   const sizes = ["S", "M", "L", "XL", "XXL"];
 
-  // To store user selections: { [productId]: { size, qty } }
   const [selections, setSelections] = useState({});
 
   useEffect(() => {
@@ -63,7 +62,6 @@ export default function ProductsPage() {
     );
   };
 
-  // Handle size change for a product
   const handleSizeChange = (productId, newSize) => {
     setSelections((prev) => ({
       ...prev,
@@ -74,9 +72,8 @@ export default function ProductsPage() {
     }));
   };
 
-  // Handle qty change for a product
   const handleQtyChange = (productId, newQty) => {
-    const qty = Math.max(1, newQty); // minimum 1
+    const qty = Math.max(1, newQty);
     setSelections((prev) => ({
       ...prev,
       [productId]: {
@@ -88,7 +85,6 @@ export default function ProductsPage() {
 
   return (
     <main className="min-h-screen pt-12 pb-16 px-6 bg-gradient-to-br from-blue-200 via-blue-400 to-blue-700 text-slate-900 relative overflow-hidden font-sans">
-      {/* Floating Icons */}
       <FloatingIcon
         Icon={FaShoppingBag}
         style={{
@@ -129,7 +125,6 @@ export default function ProductsPage() {
         }}
       />
 
-      {/* Title */}
       <h1 className="text-center text-4xl font-extrabold mb-2 text-blue-900 drop-shadow-md relative z-10">
         Explore Our Latest Products
       </h1>
@@ -138,36 +133,30 @@ export default function ProductsPage() {
         Shop smart, live bold — find your perfect style with{" "}
         <span className="text-black font-bold">QuickCart</span>.
       </p>
-     
-        <div className="flex justify-center mb-10">
-          <Breadcrumb className="rounded-lg border border-blue-500 bg-white px-4 py-2 shadow-sm">
-            <BreadcrumbList className="flex items-center space-x-2">
-              <BreadcrumbItem>
-                <BreadcrumbLink
-                  href="/"
-                  className="text-blue-700 font-semibold"
-                >
-                  Home
-                </BreadcrumbLink>
-              </BreadcrumbItem>
-              <BreadcrumbSeparator>/</BreadcrumbSeparator>
-            
-              <BreadcrumbItem>
-                <BreadcrumbPage className="text-gray-700 font-semibold">
+
+      <div className="flex justify-center mb-10">
+        <Breadcrumb className="rounded-lg border border-blue-500 bg-white px-4 py-2 shadow-sm">
+          <BreadcrumbList className="flex items-center space-x-2">
+            <BreadcrumbItem>
+              <BreadcrumbLink href="/" className="text-blue-700 font-semibold">
+                Home
+              </BreadcrumbLink>
+            </BreadcrumbItem>
+            <BreadcrumbSeparator>/</BreadcrumbSeparator>
+
+            <BreadcrumbItem>
+              <BreadcrumbPage className="text-gray-700 font-semibold">
                 Products
-                </BreadcrumbPage>
-              </BreadcrumbItem>
-            </BreadcrumbList>
-          </Breadcrumb>
-        </div>
-      {/* Product Grid */}
+              </BreadcrumbPage>
+            </BreadcrumbItem>
+          </BreadcrumbList>
+        </Breadcrumb>
+      </div>
+
       <div className="max-w-6xl mx-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8 relative z-10">
         {products.map((product) => {
-   
-          const selectedSize =
-            (selections[product.id]?.size) || sizes[0];
-          const selectedQty =
-            (selections[product.id]?.qty) || 1;
+          const selectedSize = selections[product.id]?.size || sizes[0];
+          const selectedQty = selections[product.id]?.qty || 1;
 
           return (
             <div
@@ -175,7 +164,6 @@ export default function ProductsPage() {
               className="bg-white rounded-xl shadow-md flex flex-col hover:shadow-xl transform transition duration-300 ease-in-out hover:scale-105 h-[430px] cursor-pointer"
               onClick={() => router.push(`/products/${product.id}`)}
             >
-              {/* Product Image */}
               <div className="w-full h-52 border-b border-gray-300 overflow-hidden">
                 <img
                   src={product.images?.[0] || product.thumbnail || ""}
@@ -188,7 +176,6 @@ export default function ProductsPage() {
                 className="flex flex-col flex-grow p-4 justify-between"
                 onClick={(e) => e.stopPropagation()}
               >
-                {/* Title & Description */}
                 <div>
                   <h2
                     className="text-blue-700 font-bold text-base mb-1 truncate"
@@ -206,7 +193,6 @@ export default function ProductsPage() {
 
                   <StarRating rating={product.rating} />
 
-                  {/* Stock & Discount Info */}
                   <div className="flex items-center gap-3 mt-1 text-xs font-medium text-slate-600">
                     <span
                       className={`px-2 py-0.5 rounded-full ${
@@ -224,7 +210,6 @@ export default function ProductsPage() {
                     )}
                   </div>
 
-                  {/* Size & Qty */}
                   <div className="flex gap-3 mt-3 text-xs">
                     <div className="flex-1">
                       <label
@@ -273,7 +258,6 @@ export default function ProductsPage() {
                   </div>
                 </div>
 
-                {/* Tags & Price */}
                 <div className="mt-4 flex flex-col gap-2">
                   <div className="flex flex-wrap gap-1">
                     {(product.tags || []).map((tag) => (
@@ -293,12 +277,12 @@ export default function ProductsPage() {
                     <button
                       onClick={(e) => {
                         e.stopPropagation();
-                       
+
                         router.push(
                           `/checkout?productId=${product.id}&size=${selectedSize}&quantity=${selectedQty}`
                         );
                       }}
-                      className="bg-blue-800 hover:bg-blue-700 text-white font-semibold px-3 py-1.5 rounded-lg flex items-center gap-2 transition-colors text-xs"
+                      className="bg-blue-800 hover:bg-blue-700 text-white font-semibold px-3 py-1.5 rounded-lg flex items-center gap-2 cursor-pointer transition-colors text-xs"
                     >
                       Buy Now <FaShoppingBag size={14} />
                     </button>
