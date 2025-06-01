@@ -7,9 +7,11 @@ import { FaUser } from "react-icons/fa6";
 import { TbEdit } from "react-icons/tb";
 
 export default function ThankYouInner() {
+  //  const SERVER_URL = "http://localhost:5000";
+  const SERVER_URL = "https://quick-cart-backend-seven.vercel.app/";
+
   const searchParams = useSearchParams();
   const orderId = searchParams.get("orderId");
-  const SERVER_URL = "http://localhost:5000";
   const [order, setOrder] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);

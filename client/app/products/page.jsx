@@ -19,7 +19,9 @@ const FloatingIcon = ({ Icon, style }) => (
 );
 
 export default function ProductsPage() {
-  const SERVER_URL = "http://localhost:5000";
+  // const SERVER_URL = "http://localhost:5000";
+  const SERVER_URL = "https://quick-cart-backend-seven.vercel.app/";
+
   const [products, setProducts] = useState([]);
   const router = useRouter();
   const sizes = ["S", "M", "L", "XL", "XXL"];
