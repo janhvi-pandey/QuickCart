@@ -12,7 +12,7 @@ router.post("/", checkoutValidation, async (req, res) => {
   if (!errors.isEmpty())
     return res.status(400).json({ errors: errors.array() });
 
-  const { form, productId, quantity } = req.body;
+  const { form, productId, quantity,size } = req.body;
 
   try {
     const product = await Product.findById(productId);
@@ -30,6 +30,7 @@ router.post("/", checkoutValidation, async (req, res) => {
         description: product.description,
         variant: form.variant || "",
         quantity: quantity,
+        size: size || "",
         price: product.price,
         image: product.images?.[0] || "",
         subtotal: product.price * quantity,
