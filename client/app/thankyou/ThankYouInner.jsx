@@ -8,7 +8,7 @@ import { TbEdit } from "react-icons/tb";
 
 export default function ThankYouInner() {
   //  const SERVER_URL = "http://localhost:5000";
-  const SERVER_URL = "https://quick-cart-backend-seven.vercel.app";
+  const SERVER_URL = "https://server-quick-cart.vercel.app";
 
   const searchParams = useSearchParams();
   const orderId = searchParams.get("orderId");

@@ -19,7 +19,7 @@ connectDB();
 app.use(cors({
   origin: [
     "http://localhost:3000",
-    "https://quick-cart-8wr4.vercel.app/"
+    "https://quick-cart-mart.vercel.app"
   ],
   credentials: true,
 }));
